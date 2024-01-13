@@ -13,7 +13,7 @@ function Sort() {
   const sort = useSelector((state) => state.filter.sort);
   const sortRef = React.useRef();
 
-  console.log(sortRef);
+   
 
   const [open, setOpen] = React.useState(false);
 

@@ -24,21 +24,32 @@ function Home() {
     dispatch(setCategoryId(id));
   };
 
-  const pizzas = items
-    // .filter((obj) => {
-    //   if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
-    //     return true;
-    //   }
-    //   return false;
-    // })
-
-    .map((obj) => (isloading ? <Skeleton /> : <PizzaBlock key={obj.id} {...obj} />));
+  const pizzas = items.map((obj) =>
+    isloading ? <Skeleton /> : <PizzaBlock key={obj.id} {...obj} />,
+  );
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
   React.useEffect(() => {
     setIsLoading(true);
     const search = searchValue ? `&title=${searchValue}` : '';
 
+    // try {
+    //   axios
+    //     .get(
+    //       `https://-e3b0c38e15f1a3a8.mokky.dev/items?${
+    //         categoryId > 0 ? `category=${categoryId}` : ''
+    //       }&sortBy=${sortType}${search} `,
+    //     )
+    //     .then((res) => {
+    //       setItems(res.data);
+    //       setIsLoading(false);
+    //       console.log(555);
+    //     });
+    // } catch (err) {
+    //   setIsLoading(false);
+    //   alert('Ошибка при получении пицц');
+    //   console.log(err, 'AXIOS ERROR');
+    // }
     axios
       .get(
         `https://e3b0c38e15f1a3a8.mokky.dev/items?${
@@ -47,7 +58,15 @@ function Home() {
       )
       .then((res) => {
         setItems(res.data);
+      })
+
+      .catch((err) => {
+        console.log(err, 'AXIOS ERROR');
+        alert('Ошибка при получении пицц');
+      })
+      .finally(() => {
         setIsLoading(false);
+        console.log('finally loading');
       });
 
     window.scrollTo(0, 0);
